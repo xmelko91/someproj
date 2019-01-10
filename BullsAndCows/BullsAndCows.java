@@ -3,27 +3,76 @@ import java.util.*;
 final class BulllsAndCows {
     public static void main(final String[] args) {
         Scanner sc = new Scanner(System.in);
-        int[] nms = {0,1,2,3,4,5,6,7,8,9};
-        int nmsn = 10;
-        long end = 0;
-        int nb = sc.nextInt();
-        while (nb > 10){
-            System.out.printf("Can't generate a secret number with a length of %d because there aren't enough unique digits.\nPlease enter a number not greater than 10.\n", nb);
-            nb = sc.nextInt();
+        char[] nms = {'0','1','2','3','4','5','6','7','8','9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+
+        //long end = 0;
+        System.out.println("Enter HC-ness!");
+        int nb = 0;
+        try{
+            int n = sc.nextInt();
+            String t = sc.nextLine();
+            nb = n;
+        }catch (Exception e){
+            String trash = sc.nextLine();
+            System.out.println("Not valible! Input number > 0 and <= 36!(0-9 + a-z)");
         }
-        for (int n = 0; n < nb; n++){
-            int pN = (int) System.nanoTime();
-            pN = pN % nmsn;
+        while (nb > 36 || nb < 1){
+            if (nb < 1)
+                System.out.println("Needet valible number > 0!");
+            else
+                System.out.printf("Can't generate a secret number with a length of %d because there aren't enough unique digits.\nPlease enter a number not greater than 10.\n", nb);
+            try{
+                int n = sc.nextInt();
+                String t = sc.nextLine();
+                nb = n;
+            }catch (Exception e){
+                String trash = sc.nextLine();
+                System.out.println("Not valible! Input number > 0 and <= 36!(0-9 + a-z)");
+            }
+        }
+        nb--;
+        System.out.println("Numbers of digits?");
+        int nmsn = 0;
+        try{
+            int n = sc.nextInt();
+            String t = sc.nextLine();
+            nmsn = n;
+        }catch (Exception e){
+            String trash = sc.nextLine();
+            String t = sc.nextLine();
+            System.out.println("Can't generate that!");
+        }
+
+        while (nmsn > nb + 1 || nmsn < 1){
+            try{
+                int n = sc.nextInt();
+                nmsn = n;
+                if (nmsn < 1 || nmsn > nb + 1)
+                    System.out.printf("Can't generate a secret number with a length of %d because there aren't enough unique digits.\nPlease enter a number not greater than %d.\n", nmsn, nb + 1);
+            }catch (Exception e){
+                String trash = sc.nextLine();
+                System.out.println("Can't generate that!");
+            }
+        }
+        nmsn--;
+        char[] end = new char[nmsn];
+        int pos = 0;
+        for (int n = 0; n < nmsn; n++){
+            int pN = (int) (Math.random() * 100);
+            pN = pN % nb;
             if (pN < 0)
                 pN *= -1;
-            if (end == 0 && pN == 0){
-                pN = 3;
-            }
-            end = end * 10 + nms[pN];
-            nms[pN] = nms[nmsn - 1];
-            nmsn--;
+            //if (end.length == 0 && pN == 0){
+              //  pN = 3;
+            //}
+            end[pos] = nms[pN];
+            pos++;
+            nms[pN] = nms[nb];
+            nb--;
         }
-        String ss = Long.toString(end);
+        String ss = "";
+        for (char c : end)
+            ss += c;
         System.out.println(ss);
 
         while (true) {
@@ -76,7 +125,7 @@ final class BulllsAndCows {
     }
 
     private static int cows(String a, String b){
-        int nb = 0;
+        int nb;
         int cow = 0;
         for (int i = 0; i < a.length(); i++){
             nb = 0;
